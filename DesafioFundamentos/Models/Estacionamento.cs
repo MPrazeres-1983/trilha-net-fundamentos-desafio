@@ -43,7 +43,7 @@ namespace DesafioFundamentos.Models
             Console.WriteLine("Digite a placa do veículo para remover:");
 
             // Lê a matrícula introduzida pelo utilizador
-            string placa = Console.ReadLine();
+            string? placa = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(placa))
             {
