@@ -21,9 +21,20 @@ namespace DesafioFundamentos.Models
             Console.WriteLine("Digite a placa do veículo para estacionar:");
 
             // Lê a matrícula introduzida pelo utilizador e guarda-a
-            string placa = Console.ReadLine();
+            string? placa = Console.ReadLine();
 
-            // Adiciona a matrícula à lista de veículos
+            if (string.IsNullOrWhiteSpace(placa))
+            {
+                Console.WriteLine("Matrícula inválida.");
+                return;
+            }
+
+            placa = placa.Trim();
+            if (veiculos.Any(x => string.Equals(x, placa, StringComparison.OrdinalIgnoreCase)))
+            {
+                Console.WriteLine("Este veículo já está estacionado.");
+                return;
+            }
             veiculos.Add(placa);
         }
 
@@ -32,21 +43,32 @@ namespace DesafioFundamentos.Models
             Console.WriteLine("Digite a placa do veículo para remover:");
 
             // Lê a matrícula introduzida pelo utilizador
-            string placa = Console.ReadLine();
+            string? placa = Console.ReadLine();
 
-            // Verifica se o veículo existe (comparando tudo em maiúsculas para evitar erros)
-            if (veiculos.Any(x => x.ToUpper() == placa.ToUpper()))
+            if (string.IsNullOrWhiteSpace(placa))
+            {
+                Console.WriteLine("Matrícula inválida.");
+                return;
+            }
+            placa = placa.Trim();
+
+            // Pesquisa sem distinguir maiúsculas/minúsculas.
+            if (veiculos.Any(x => string.Equals(x, placa, StringComparison.OrdinalIgnoreCase)))
             {
                 Console.WriteLine("Digite a quantidade de horas que o veículo permaneceu estacionado:");
 
                 // Lê o texto da consola e converte-o para um número inteiro
-                int horas = int.Parse(Console.ReadLine());
+                if (!int.TryParse(Console.ReadLine(), out int horas) || horas < 0)
+                {
+                    Console.WriteLine("Número de horas inválido.");
+                    return;
+                }
 
                 // Realiza o cálculo do preço total
                 decimal valorTotal = precoInicial + (precoPorHora * horas);
 
                 // Como a verificação aceita maiúsculas/minúsculas, localizamos o registo exato guardado na lista para o remover
-                string veiculoARemover = veiculos.First(x => x.ToUpper() == placa.ToUpper());
+                string veiculoARemover = veiculos.First(x => string.Equals(x, placa, StringComparison.OrdinalIgnoreCase));
                 veiculos.Remove(veiculoARemover);
 
                 Console.WriteLine($"O veículo {placa} foi removido e o preço total foi de: R$ {valorTotal}");
